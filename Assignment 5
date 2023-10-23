@@ -1,0 +1,140 @@
+
+# Question 1
+
+#Import the library nleqslv for solving non-linear equation 
+library(nleqslv)
+c <- runif(1)
+n <- 100
+f1 <- function(x){
+  theta <- 2.0
+  z <- c- (1-(theta+1+theta*x)/(theta+1))*exp(-theta*x)
+  return (z)
+}
+k <- nleqslv(1.2,f1)
+print(k)
+
+
+# Question 2
+# Part (i)
+
+# Cauchy Distribution 
+
+cauchy_sample_space <- function(alpha,n){
+  x <- c();
+  for( i in 1:n){
+    y <- runif(1)
+    x[i]<- alpha*tan((2*y-1)*(pi/2))
+  }
+  return (x);
+}
+
+#Genarate 1000 samples for Cauchy distribution
+cauchy_sample_space(2,1000)
+
+
+
+# Part (ii) 
+# Generalized exponential distribution
+
+sample_space <- function (alpha,beta,n){
+  x <- c(); 
+  for(i in 1:n){
+    y <- runif(1)
+    x[i] <- (-1/beta)*log(1-y^(1/alpha))
+  }
+  return (x)
+}
+sample_space(2,3,1000)
+
+
+# Part (iii) 
+# Kumaraswamy Distribution
+
+sample_space <- function (alpha,beta,n){
+  x <- c(); 
+  for(i in 1:n){
+    y <- runif(1)
+    x[i] <- (1-(1-y)^(1/beta))^(1/alpha)
+  }
+  return (x)
+}
+sample_space(2,3,1000)
+
+
+
+
+# Question 3 
+
+# Set the parameter 'a' to a specific value
+a <- 0.5
+
+# Function to generate samples from the distribution
+generate_samples <- function(n, a) {
+  samples <- numeric(n)
+  
+  for (i in 1:n) {
+    U1 <- runif(1)
+    U2 <- runif(1)
+    U3 <- runif(1)
+    
+    if (U1 <= a) {
+      X <- U2
+    } else {
+      X <- max(U2, U3)
+    }
+    
+    samples[i] <- X
+  }
+  
+  return(samples)
+}
+
+# Generate 2000 samples from the distribution
+n <- 2000
+samples <- generate_samples(n, a)
+
+print(samples)
+
+# Check the mean and standard deviation of the generated samples
+mean(samples)
+sd(samples)
+
+
+# Question 4 
+
+# Function to generate 1000 standard normal random samples
+generate_standard_normals <- function(n) {
+  samples <- numeric(n)
+  count <- 0
+  
+  while (count < n) {
+    U1 <- runif(1)
+    U2 <- runif(1)
+    V1 <- 2 * U1 - 1
+    V2 <- 2 * U2 - 1
+    W <- V1^2 + V2^2
+    
+    if (W > 1) {
+      next
+    }
+    
+    Y <- sqrt((-2*log(W)) / W)
+    X1 <- V1 * Y
+    X2 <- V2 * Y
+    
+    samples[count + 1] <- X1
+    samples[count + 2] <- X2
+    count <- count + 2
+  }
+  
+  return(samples[1:n])
+}
+
+# Generate 1000 standard normal random samples
+n <- 1000
+samples <- generate_standard_normals(n)
+print(samples)
+
+# Check the mean and standard deviation of the generated samples
+mean(samples)
+sd(samples)

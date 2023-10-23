@@ -1,0 +1,99 @@
+
+
+
+#Question 1 (i)
+
+library(nleqslv)
+n <- 1000
+kk=numeric()
+for(i in 1:n){
+  c <- runif(1)
+  
+  f1 <- function(x){
+    theta <- 2.0
+    z <- c- (1-((theta+1+theta*x)/(theta+1)*exp(-theta*x)))
+    return (z)
+  }
+  k <- nleqslv(1.5,f1)
+  print(k$message)
+  kk[i] = k$x
+}
+print(kk)
+
+sum1 <- sum(kk)/n
+theta_MLE <- ((1-sum1)+sqrt((sum1)^2+6*sum1+1))/(2*sum1)
+print(theta_MLE)
+
+#Question 1 (ii)
+
+
+#Question 2(i)
+x <-c();
+for(i in 1 : n){
+  x[i] <- rnorm(1,mean = 1 , sd = 3)
+}
+print(x)
+
+mu_MLE <- sum(x)/n
+print(mu_MLE)
+sigma_MLE <- sqrt(sum((x-mu_MLE)^2)/n)
+print(sigma_MLE)
+
+# Question 2(ii)
+
+library(nleqslv)
+sample_space <- function (alpha,beta,n){
+  x <- c(); 
+  for(i in 1:n){
+    y <- runif(1)
+    x[i] <- (-1/beta)*log(1-y^(1/alpha))
+  }
+  return (x)
+}
+k <- sample_space(1,3,1000)
+print(k)
+
+n <- 1000
+f1 <- function(beta){ 
+  sum1 <- sum(k);
+  sum2 <- sum(log(1-exp(-beta*k)))
+  sum3 <- sum((exp(-beta*k)*k)/(1-exp(-beta*k)))
+  z <- n/beta-sum1-((n/sum2)+1)*sum3
+  return(z)
+}
+beta <- nleqslv(2,f1)$x
+print(beta)
+alpha <- -n/sum(log(1-exp(-beta*k)))
+
+print(alpha)
+
+
+# Question 2(iii)
+
+sample_space <- function (alpha,beta,n){
+  x <- c(); 
+  for(i in 1:n){
+    y <- runif(1)
+    x[i] <- (1-(1-y)^(1/beta))^(1/alpha)
+  }
+  return (x)
+}
+k<- sample_space(10,39,1000)
+print(k)
+
+n <- 1000
+alpha <-3
+f2 <- function(alpha){
+  sum1 <- sum(log(k))
+  sum2 <- sum(log(1-k^alpha))
+  sum3 <- (n/sum2)+1
+  sum4 <- sum(((k^alpha)*log(k))/(1-k^alpha))
+  z <- (n/alpha)+sum1+sum3*sum4
+  
+  return (z)
+  
+}
+alpha <- nleqslv(3,f2)$x
+print(alpha)
+beta <- -n/sum(log(1-k^alpha))
+print(beta)

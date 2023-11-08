@@ -1,0 +1,455 @@
+
+
+
+#Generate the n sample of the given distribution 
+n <- 10
+f1<-function(n){
+  x<-c()
+  for(i in 1:n){
+    y<-runif(1)
+    x[i]<-3*y + 2
+  }
+  return(x)
+}
+x<-f1(n)
+x<-sort(x)
+print(x)
+
+# Generate n sample value of origin CDF of given distribution 
+
+f2<-function(n){
+  f0<-c();
+  for(i in 1:n){
+    f0[i]<-(x[i]-2)/3
+  }
+  return (f0)
+}
+
+f0<-f2(n)
+print(f0)
+
+# Generate n sample of Empirical  distribution function
+
+f3<-function(n){
+  fn<-c()
+  for(i in 1:n){
+    fn[i]<-i/10
+  }
+  return (fn)
+}
+
+fn<-f3(n)
+print(fn)
+
+f_plus<-function(n){
+  d_p<-c()
+  for(i in 1:n){
+    d_p[i]<-abs(f0[i]-fn[i])
+  }
+  return (d_p)
+}
+d_p<-f_plus(n)
+print(d_p)
+d_plus<-max(d_p)
+
+#Find the maximum of d_minus 
+
+f4<-function(n){
+  fnn<-c()
+  for(i in 1:n){
+    fnn[i]<-(i-1)/n
+  }
+  return (fnn)
+}
+
+fnn <-f4(n)
+print(fnn)
+
+
+f_minus<-function(n){
+  d_m<-c()
+  for(i in 1:n){
+    d_m[i]<-abs(f0[i]-fnn[i])
+  }
+  return (d_m)
+}
+d_m<-f_minus(n)
+print(d_m)
+d_minus<-max(d_m)
+
+d<-max(d_plus,d_minus)
+print(d)
+
+# The critical value for  significance level  5 % is 0.410  
+critical_value <- 0.410
+
+ if ( d <= critical_value){
+   print("Our assumption is correct")
+ }else{
+   print("Our assumption is wrong")
+}
+
+
+
+
+# Question 1 (ii)
+
+library(nleqslv)
+n <- 10
+kk=numeric();
+for(i in 1:n){
+  c <- runif(1)
+  
+  f1 <- function(x){
+    theta <- 2.0
+    z <- c- (1-((theta+1+theta*x)/(theta+1)*exp(-theta*x)))
+    return (z)
+  }
+  k <- nleqslv(1.5,f1)
+  print(k$message)
+  kk[i] = k$x
+}
+x <- sort(kk)
+print(x)
+
+# Generate n sample value of the given CDF 
+
+f2<-function(n){
+  f0<-c();
+  theta <- 2.0
+  for(i in 1:n){
+    f0[i]<-(1-((theta+1+theta*kk[i])/(theta+1)*exp(-theta*kk[i])))
+  }
+  return (f0)
+}
+
+f0 <- f2(n);
+print(f0)
+
+# Generate n sample of Empirical  distribution function
+f3<-function(n){
+  fn<-c()
+  for(i in 1:n){
+    fn[i]<-i/10
+  }
+  return (fn)
+}
+
+fn<-f3(n)
+print(fn)
+
+f_plus<-function(n){
+  d_p<-c()
+  for(i in 1:n){
+    d_p[i]<-abs(f0[i]-fn[i])
+  }
+  return (d_p)
+}
+d_p<-f_plus(n)
+print(d_p)
+d_plus<-max(d_p)
+
+#Find the maximum of d_minus 
+
+f4<-function(n){
+  fnn<-c()
+  for(i in 1:n){
+    fnn[i]<-(i-1)/n
+  }
+  return (fnn)
+}
+
+fnn <-f4(n)
+print(fnn)
+
+
+f_minus<-function(n){
+  d_m<-c()
+  for(i in 1:n){
+    d_m[i]<-abs(f0[i]-fnn[i])
+  }
+  return (d_m)
+}
+d_m<-f_minus(n)
+print(d_m)
+d_minus<-max(d_m)
+
+d<-max(d_plus,d_minus)
+print(d)
+
+
+if ( d <= critical_value){
+  print("Our assumption is correct")
+}else{
+  print("Our assumption is wrong")
+}
+
+
+#Question no 3 (i) 
+
+
+#Sample generate for normal distribution
+n <- 10
+
+x <- rnorm(n,mean = 0 , sd = 1)
+
+x<-sort(x)
+print(x)
+
+#Generate the sample for the given CDF
+
+f0 <- pnorm(x,mean=0,sd = 1)
+
+print(f0)
+
+# Generate n sample of Empirical  distribution function
+
+f3<-function(n){
+  fn<-c()
+  for(i in 1:n){
+    fn[i]<-i/10
+  }
+  return (fn)
+}
+
+fn<-f3(n)
+print(fn)
+
+f_plus<-function(n){
+  d_p<-c()
+  for(i in 1:n){
+    d_p[i]<-abs(f0[i]-fn[i])
+  }
+  return (d_p)
+}
+d_p<-f_plus(n)
+print(d_p)
+d_plus<-max(d_p)
+
+#Find the maximum of d_minus 
+
+f4<-function(n){
+  fnn<-c()
+  for(i in 1:n){
+    fnn[i]<-(i-1)/n
+  }
+  return (fnn)
+}
+
+fnn <-f4(n)
+print(fnn)
+
+
+f_minus<-function(n){
+  d_m<-c()
+  for(i in 1:n){
+    d_m[i]<-abs(f0[i]-fnn[i])
+  }
+  return (d_m)
+}
+d_m<-f_minus(n)
+print(d_m)
+d_minus<-max(d_m)
+
+d<-max(d_plus,d_minus)
+print(d)
+
+# The critical value for  significance level  5 % is 0.410  
+critical_value <- 0.410
+
+if( d <= critical_value){
+  print("Our assumption is correct")
+}else{
+  print("Our assumption is wrong")
+}
+  
+  
+#Question No 3 (ii) 
+
+# Generate n sample for the given distribution
+
+f1 <- function (alpha,beta,n){
+  z <- c(); 
+  for(i in 1:n){
+    y <- runif(1)
+    z[i] <- (-1/beta)*log(1-y^(1/alpha))
+  }
+  return (z)
+}
+x <- sort(f1(1,2,10))
+print(x)
+
+# Generate n sample for the given CDF 
+
+f2 <- function(alpha,beta,n){
+  z <- c();
+  for(i in 1:n){
+    z[i] <- (1-exp(-beta*x[i])^alpha)
+  }
+  return (z)
+}
+
+f0 <- f2(1,2,10)
+print(f0)
+
+
+# Generate n sample of Empirical  distribution function
+
+f3<-function(n){
+  fn<-c()
+  for(i in 1:n){
+    fn[i]<-i/10
+  }
+  return (fn)
+}
+
+fn<-f3(n)
+print(fn)
+
+f_plus<-function(n){
+  d_p<-c()
+  for(i in 1:n){
+    d_p[i]<-abs(f0[i]-fn[i])
+  }
+  return (d_p)
+}
+d_p<-f_plus(n)
+print(d_p)
+d_plus<-max(d_p)
+
+#Find the maximum of d_minus 
+
+f4<-function(n){
+  fnn<-c()
+  for(i in 1:n){
+    fnn[i]<-(i-1)/n
+  }
+  return (fnn)
+}
+
+fnn <-f4(n)
+print(fnn)
+
+
+f_minus<-function(n){
+  d_m<-c()
+  for(i in 1:n){
+    d_m[i]<-abs(f0[i]-fnn[i])
+  }
+  return (d_m)
+}
+d_m<-f_minus(n)
+print(d_m)
+d_minus<-max(d_m)
+
+d<-max(d_plus,d_minus)
+print(d)
+
+# The critical value for  significance level  5 % is 0.410  
+critical_value <- 0.410
+
+if( d <= critical_value){
+  print("Our assumption is correct")
+}else{
+  print("Our assumption is wrong")
+}
+
+#Question 3 (iii)
+
+
+#Genearte n sample of the given 
+sample_space <- function (alpha,beta,n){
+  x <- c(); 
+  for(i in 1:n){
+    y <- runif(1)
+    x[i] <- (1-(1-y)^(1/beta))^(1/alpha)
+  }
+  return (x)
+}
+x<-sort(sample_space(2,3,10))
+print(x)
+
+f1 <- function(alpha,beta,n){
+  z <- c();
+  for(i in 1 : n){
+    z[i] <- 1-(1-x[i]^alpha)^beta
+  }
+  return (z)
+}
+f0 <- f1(2,3,10)
+print(f0)
+
+
+# Generate n sample of Empirical  distribution function
+
+f3<-function(n){
+  fn<-c()
+  for(i in 1:n){
+    fn[i]<-i/10
+  }
+  return (fn)
+}
+
+fn<-f3(n)
+print(fn)
+
+f_plus<-function(n){
+  d_p<-c()
+  for(i in 1:n){
+    d_p[i]<-abs(f0[i]-fn[i])
+  }
+  return (d_p)
+}
+d_p<-f_plus(n)
+print(d_p)
+d_plus<-max(d_p)
+
+#Find the maximum of d_minus 
+
+f4<-function(n){
+  fnn<-c()
+  for(i in 1:n){
+    fnn[i]<-(i-1)/n
+  }
+  return (fnn)
+}
+
+fnn <-f4(n)
+print(fnn)
+
+
+f_minus<-function(n){
+  d_m<-c()
+  for(i in 1:n){
+    d_m[i]<-abs(f0[i]-fnn[i])
+  }
+  return (d_m)
+}
+d_m<-f_minus(n)
+print(d_m)
+d_minus<-max(d_m)
+
+d<-max(d_plus,d_minus)
+print(d)
+
+# The critical value for  significance level  5 % is 0.410  
+critical_value <- 0.410
+
+if( d <= critical_value){
+  print("Our assumption is correct")
+}else{
+  print("Our assumption is wrong")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

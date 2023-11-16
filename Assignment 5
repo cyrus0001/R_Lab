@@ -2,16 +2,23 @@
 # Question 1
 
 #Import the library nleqslv for solving non-linear equation 
+
 library(nleqslv)
-c <- runif(1)
-n <- 100
-f1 <- function(x){
-  theta <- 2.0
-  z <- c- (1-(theta+1+theta*x)/(theta+1))*exp(-theta*x)
-  return (z)
+n <- 1000
+kk=numeric()
+for(i in 1:n){
+  c <- runif(1)
+  
+  f1 <- function(x){
+    theta <- 2.0
+    z <- c- (1-((theta+1+theta*x)/(theta+1)*exp(-theta*x)))
+    return (z)
+  }
+  k <- nleqslv(1.5,f1)
+  print(k$message)
+  kk[i] = k$x
 }
-k <- nleqslv(1.2,f1)
-print(k)
+print(kk)
 
 
 # Question 2
